@@ -1,6 +1,6 @@
 #!/bin/bash
-set -eu
-
+#set -eu
+set -x 
 # Find date command
 if [[ $(uname -s) == Darwin ]]; then
   MYDIR=$(cd "$(dirname "$(greadlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
@@ -45,9 +45,10 @@ source ${BUILD_DIR}/FV3/ccpp/physics/CCPP_SCHEMES.sh
 source ${BUILD_DIR}/FV3/ccpp/physics/CCPP_CAPS.sh
 source ${BUILD_DIR}/FV3/ccpp/physics/CCPP_STATIC_API.sh
 
-CMAKE_FLAGS+=" -DCCPP=ON -DSTATIC=ON -DSUITES=${CCPP_SUITES} -DNETCDF_DIR=${NETCDF}"
+CMAKE_FLAGS+=" -DCMAKE_PREFIX_PATH=$HOME/NCEPLIBS/build-9.3/install -DCCPP=ON -DSTATIC=ON -DSUITES=${CCPP_SUITES} -DNETCDF_DIR=${NETCDF}"
 
 cd ${BUILD_DIR}
-cmake .. ${CMAKE_FLAGS}
+cmake .. -DNETCDF_DIR=$NETCDF ${CMAKE_FLAGS}
 make -j ${BUILD_JOBS:-4}
+#make VERBOSE=1
 cp -v NEMS.exe ${MYDIR}/ufs_weather_model

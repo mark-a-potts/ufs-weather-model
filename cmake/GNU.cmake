@@ -1,5 +1,5 @@
-
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fcray-pointer -ffree-line-length-none -fno-range-check -fbacktrace")
+macro(setGNU)
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fcray-pointer -ffree-line-length-none -fno-range-check -fbacktrace ")
 
 if(DEBUG)
     message("DEBUG is       ENABLED")
@@ -61,3 +61,4 @@ if(INLINE_POST)
 else()
     message("INLINE_POST is disabled")
 endif()
+endmacro(setGNU)
