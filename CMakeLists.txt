@@ -82,9 +82,9 @@ find_package(ESMF REQUIRED)
 set(ESMF_MOD ${ESMF_F90COMPILEPATHS})
 set(ESMF_LIB ${ESMF_LIBSDIR}/libesmf.so)
 
-#set(NETCDF_F90 YES)
+#set(NETCDF_Fortran YES)
 #set(NETCDF_C YES)
-#find_package(NetCDF )
+find_package(NetCDF REQUIRED C Fortran)
 find_package(bacio)
 find_package(nemsio)
 find_package(sigio)
@@ -243,10 +243,10 @@ set_property(SOURCE FMS/fft/fft.F90 APPEND_STRING PROPERTY COMPILE_FLAGS "-DSGIC
 
 target_include_directories(fms PUBLIC ${PROJECT_SOURCE_DIR}/FMS/include FMS/include FMS/fms FMS/mpp/include)
 set(NETCDF_INC_DIR ${NETCDF_INCLUDES})
-message("HEY, netcdf includes are ${NETCDF_INCLUDES_F90} and ${NETCDF_INCLUDES}")
+message("HEY, netcdf includes are ${NETCDF_INCLUDES_F90} and ${NETCDF_Fortran_INCLUDES}")
 #target_include_directories(fms PRIVATE ${NETCDF_INC_DIR})
 add_definitions(${MPI_Fortran_COMPILE_FLAGS})
-target_include_directories(fms PRIVATE ${NETCDF_INCLUDES} ${NETCDF_INCLUDES_F90} ${MPI_Fortran_INCLUDE_DIRS} ${MPI_INCLUDE_PATH} "./" ${CMAKE_INCLUDE_OUTPUT_DIRECTORY})
+target_include_directories(fms PRIVATE ${NetCDF_C_INCLUDE_DIRS} ${NetCDF_Fortran_INCLUDE_DIRS} ${MPI_Fortran_INCLUDE_DIRS} ${MPI_INCLUDE_PATH} "./" ${CMAKE_INCLUDE_OUTPUT_DIRECTORY})
 link_directories(${MPI_Fortran_LIBRARIES} ${ARCHIVE_OUTPUT_PATH} )
 
 set_target_properties(fms PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/FMS)
@@ -357,7 +357,8 @@ else()
     set(IPD_LIBRARIES ipd)
 endif()
 set(NCEP_LIBS nemsio;bacio_4;sp_d;w3emc_d;w3nco_d)
-message("HOOOAHHHH ${NETCDF_LIBRARIES}#${NETCDF_LIBRARIES_F90}#${MPI_Fortran_LIBRARIES}#${MKL_LIB}")
+message("HOOOAHHHH ${NetCDF_Fortran_LIBRARIES}#${NETCDF_LIBRARIES}#${NetCDF_Fortran_FOUND}")
+
 target_link_libraries(NEMS.exe
                       fv3cap
                       fv3core
@@ -372,9 +373,9 @@ target_link_libraries(NEMS.exe
                       nemsio 
                       ${NCEP_LIBS} 
                       ${ESMF_LIB}  
-                      ${NETCDF_LIBRARIES})
-#                     ${NETCDF_LIBRARIES_F90}
-#                     ${MPI_Fortran_LIBRARIES}
+                      ${MPI_Fortran_LIBRARIES}
+                      ${NetCDF_Fortran_LIBRARIES}
+                      ${NetCDF_LIBRARIES})
 #                     ${MKL_LIB})
 
 ################################################################################
