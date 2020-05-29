@@ -82,15 +82,17 @@ find_package(ESMF REQUIRED)
 set(ESMF_MOD ${ESMF_F90COMPILEPATHS})
 set(ESMF_LIB ${ESMF_LIBSDIR}/libesmf.so)
 
-set(NETCDF_F90 YES)
-set(NETCDF_C YES)
-find_package(NetCDF REQUIRED )
+#set(NETCDF_F90 YES)
+#set(NETCDF_C YES)
+#find_package(NetCDF )
 find_package(bacio)
 find_package(nemsio)
 find_package(sigio)
 find_package(sp)
 find_package(w3emc)
 find_package(w3nco)
+get_target_property(nemsio_inc nemsio INTERFACE_INCLUDE_DIRECTORIES)
+message("Hey, nemsio is ${nemsio_inc}")
 
 
 if(NOT DEFINED CCPP_SUITES)
@@ -240,7 +242,7 @@ add_library(
 set_property(SOURCE FMS/fft/fft.F90 APPEND_STRING PROPERTY COMPILE_FLAGS "-DSGICRAY=0 -DNAGFFT=0")
 
 target_include_directories(fms PUBLIC ${PROJECT_SOURCE_DIR}/FMS/include FMS/include FMS/fms FMS/mpp/include)
-#set(NETCDF_INC_DIR ${NETCDF_INCLUDES})
+set(NETCDF_INC_DIR ${NETCDF_INCLUDES})
 message("HEY, netcdf includes are ${NETCDF_INCLUDES_F90} and ${NETCDF_INCLUDES}")
 #target_include_directories(fms PRIVATE ${NETCDF_INC_DIR})
 add_definitions(${MPI_Fortran_COMPILE_FLAGS})
@@ -355,6 +357,7 @@ else()
     set(IPD_LIBRARIES ipd)
 endif()
 set(NCEP_LIBS nemsio;bacio_4;sp_d;w3emc_d;w3nco_d)
+message("HOOOAHHHH ${NETCDF_LIBRARIES}#${NETCDF_LIBRARIES_F90}#${MPI_Fortran_LIBRARIES}#${MKL_LIB}")
 target_link_libraries(NEMS.exe
                       fv3cap
                       fv3core
@@ -366,9 +369,14 @@ target_link_libraries(NEMS.exe
                       stochastic_physics
                       fms
                       ${WW3_LIBS}
-                      nemsio
-                      ${NCEP_LIBS} ${ESMF_LIB} ${NETCDF_LIBRARIES} ${NETCDF_LIBRARIES_F90} ${MPI_Fortran_LIBRARIES} ${MKL_LIB})
+                      nemsio 
+                      ${NCEP_LIBS} 
+                      ${ESMF_LIB}  
+                      ${NETCDF_LIBRARIES})
+#                     ${NETCDF_LIBRARIES_F90}
+#                     ${MPI_Fortran_LIBRARIES}
+#                     ${MKL_LIB})
 
-###############################################################################
-### done
-###############################################################################
+################################################################################
+#### done
+################################################################################
