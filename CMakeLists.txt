@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.15)
 
-foreach(env_var IN ITEMS CMAKE_C_COMPILER CMAKE_CXX_COMPILER CMAKE_Fortran_COMPILER)
-  if(NOT DEFINED ENV{${env_var}})
-    message(FATAL_ERROR "${env_var} is not defined")
-  endif()
-endforeach()
+#foreach(env_var IN ITEMS CMAKE_C_COMPILER CMAKE_CXX_COMPILER CMAKE_Fortran_COMPILER)
+#  if(NOT DEFINED ENV{${env_var}})
+#    message(FATAL_ERROR "${env_var} is not defined")
+#  endif()
+#endforeach()
 
-set(CMAKE_C_COMPILER $ENV{CMAKE_C_COMPILER})
-set(CMAKE_CXX_COMPILER $ENV{CMAKE_CXX_COMPILER})
-set(CMAKE_Fortran_COMPILER $ENV{CMAKE_Fortran_COMPILER})
+set(CMAKE_C_COMPILER $ENV{CC})
+set(CMAKE_CXX_COMPILER $ENV{CXX})
+set(CMAKE_Fortran_COMPILER $ENV{FC})
 set(CMAKE_Platform $ENV{CMAKE_Platform})
 
 project(ufs-weather-model
@@ -219,6 +219,7 @@ target_compile_definitions(ufs-weather-model-lib PRIVATE -DFRONT_FV3=fv3gfs_cap_
 target_include_directories(ufs-weather-model-lib PRIVATE ${PROJECT_BINARY_DIR}/NEMS/src)
 target_include_directories(ufs-weather-model-lib PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/FV3/mod)
 target_include_directories(ufs-weather-model-lib PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/FMS/mod)
+target_include_directories(ufs-weather-model-lib PRIVATE ${NETCDF_INCLUDE_DIRS})
 
 if(WW3)
     target_compile_definitions(ufs-weather-model-lib PRIVATE -DFRONT_WW3=WMESMFMD)
@@ -273,7 +274,17 @@ target_link_libraries(NEMS.exe
 ### Install
 ###############################################################################
 install(
-  TARGETS ufs-weather-model-lib fms
+  TARGETS fms 
+  EXPORT fms-config
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mod DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+install(EXPORT fms-config
+  DESTINATION lib/cmake
+)
+install(
+  TARGETS ufs-weather-model-lib 
   EXPORT ufs-weather-model-lib-config
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
