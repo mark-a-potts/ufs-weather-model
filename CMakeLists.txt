@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.15)
 
-#foreach(env_var IN ITEMS CMAKE_C_COMPILER CMAKE_CXX_COMPILER CMAKE_Fortran_COMPILER)
-#  if(NOT DEFINED ENV{${env_var}})
-#    message(FATAL_ERROR "${env_var} is not defined")
-#  endif()
-#endforeach()
+foreach(env_var IN ITEMS CMAKE_C_COMPILER CMAKE_CXX_COMPILER CMAKE_Fortran_COMPILER)
+  if(NOT DEFINED ENV{${env_var}})
+    message(FATAL_ERROR "${env_var} is not defined")
+  endif()
+endforeach()
 
-set(CMAKE_C_COMPILER $ENV{CC})
-set(CMAKE_CXX_COMPILER $ENV{CXX})
-set(CMAKE_Fortran_COMPILER $ENV{FC})
+set(CMAKE_C_COMPILER $ENV{CMAKE_C_COMPILER})
+set(CMAKE_CXX_COMPILER $ENV{CMAKE_CXX_COMPILER})
+set(CMAKE_Fortran_COMPILER $ENV{CMAKE_Fortran_COMPILER})
 set(CMAKE_Platform $ENV{CMAKE_Platform})
 
 project(ufs-weather-model

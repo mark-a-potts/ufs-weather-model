@@ -1,9 +1,9 @@
 
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fPIC -fcray-pointer -ffree-line-length-none -fno-range-check -fbacktrace")
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fcray-pointer -ffree-line-length-none -fno-range-check -fbacktrace")
 
 if(DEBUG)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Wall -fPIC -O0 -ggdb -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=invalid,zero,overflow -fbounds-check")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O0 -fPIC -ggdb")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Wall -O0 -ggdb -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=invalid,zero,overflow -fbounds-check")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O0 -ggdb")
 else()
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -O2 -fno-range-check")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
