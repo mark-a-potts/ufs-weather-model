@@ -1,11 +1,11 @@
 [submodule "FV3"]
 	path = FV3
-	url = https://github.com/NOAA-EMC/fv3atm
-	branch = develop
+	url = https://github.com/mark-a-potts/fv3atm
+	branch = jedi-ufs
 [submodule "NEMS"]
 	path = NEMS
-	url = https://github.com/NOAA-EMC/NEMS
-	branch = develop
+	url = https://github.com/mark-a-potts/NEMS
+	branch = jedi-ufs
 [submodule "FMS"]
 	path = FMS
 	url = https://github.com/NOAA-GFDL/FMS
