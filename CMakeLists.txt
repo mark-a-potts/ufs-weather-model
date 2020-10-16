@@ -154,13 +154,20 @@ endif()
 ### FMS
 ###############################################################################
 include(fms_files.cmake)
-add_library(fms ${fms_src_files})
+include(fms_headers.cmake) 
+add_library(fms ${fms_src_files} ${fms_headers} )
 target_include_directories(fms PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/FMS/include>
                                       $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/FMS/fms>
                                       $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/FMS/fms2_io/include>
                                       $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/FMS/mpp/include>)
+set(module_dir ${CMAKE_CURRENT_BINARY_DIR}/mod)
+target_include_directories(fms INTERFACE
+  $<BUILD_INTERFACE:${module_dir}>
+  $<INSTALL_INTERFACE:include>
+  $<INSTALL_INTERFACE:mod>)
 target_link_libraries(fms PRIVATE NetCDF::NetCDF_Fortran)
 set_target_properties(fms PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/FMS)
+set_target_properties(fms PROPERTIES PUBLIC_HEADER "${fms_headers}" )
 set_target_properties(fms PROPERTIES Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/FMS/mod)
 target_include_directories(fms PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/FMS/mod>)
 
@@ -279,8 +286,10 @@ install(
   TARGETS fms 
   EXPORT fms-config
   LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/mod DESTINATION ${CMAKE_INSTALL_PREFIX})
+  ARCHIVE DESTINATION lib
+  PUBLIC_HEADER DESTINATION include )
+
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/FMS/mod DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 install(EXPORT fms-config
   DESTINATION lib/cmake
