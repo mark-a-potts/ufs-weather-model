@@ -176,7 +176,7 @@ else
 fi
 
 # Longer default walltime for GNU
-if [[ $RT_COMPILER = gnu ]]; then
+if [[ ${RT_COMPILER:-} = gnu ]]; then
   WLCLK_dflt=30
 else
   WLCLK_dflt=15
@@ -222,8 +222,7 @@ export NA_INIT=1
 # Radiation
 export DO_RRTMGP=.F.
 export ICLOUD=0
-export IOVR_LW=1
-export IOVR_SW=1
+export IOVR=1
 
 # Microphysics
 export IMP_PHYSICS=11
